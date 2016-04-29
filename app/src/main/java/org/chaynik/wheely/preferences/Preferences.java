@@ -8,7 +8,7 @@ import org.chaynik.wheely.WheelyApp;
 
 
 public class Preferences {
-    public static WheelyApp mApp = WheelyApp.getInstance();
+    private static WheelyApp mApp = WheelyApp.getInstance();
     private static final String PROFILE_PREFERENCES_FILE = "profile_preferences";
     private static final Object mLock = new Object();
 

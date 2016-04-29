@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.chaynik.wheely.preferences.Profile;
+
 public class LoginFragment extends Fragment implements View.OnClickListener {
     public static final String TAG = "LoginFragment";
     public EditText mEditUserName;
@@ -29,24 +31,17 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.text_sign_in:
-//                String userName = mEditUserName.getText().toString();
-//                String password = mEditPassword.getText().toString();
-//                if (userName.isEmpty() || !userName.substring(0, 1).equals("a")){
-//                    Toast.makeText(getActivity(), "Incorrect user name", Toast.LENGTH_SHORT).show();
-//                    return;
-//                } else if (password.isEmpty() || !password.substring(0, 1).equals("a")) {
-//                    Toast.makeText(getActivity(), "Incorrect password", Toast.LENGTH_SHORT).show();
-//                    return;
-//                } else {
-//                    Toast.makeText(getActivity(), "Ща спою", Toast.LENGTH_SHORT).show();
-//                }
+                String userName = mEditUserName.getText().toString();
+                String password = mEditPassword.getText().toString();
+                if (userName.isEmpty() || !userName.substring(0, 1).equals("a")) {
+                    Toast.makeText(getActivity(), "Incorrect user name", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (password.isEmpty() || !password.substring(0, 1).equals("a")) {
+                    Toast.makeText(getActivity(), "Incorrect password", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Profile.saveUserInfo(userName, password);
                 ((MainActivity) getActivity()).showMapsFragment();
-//                if (!WheelyUtils.isServiceRunning(this, WebSocketService.class)) {
-//                    Log.i("Test", "Activity: onCreate");
-//                    startService(new Intent(this, WebSocketService.class));
-//                } else {
-//                    Log.i("Test", "Activity: onCreated");
-//                }
                 break;
 
         }

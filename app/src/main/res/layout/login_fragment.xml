@@ -42,7 +42,7 @@
         android:layout_gravity="end"
         android:gravity="center"
         android:padding="8dp"
-        android:text="@string/auth_action_text"
+        android:text="@string/auth_action_sign_in"
         android:textColor="@color/red"
         android:textSize="18sp" />
 </LinearLayout>

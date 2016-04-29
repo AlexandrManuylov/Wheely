@@ -3,9 +3,9 @@ package org.chaynik.wheely.preferences;
 import android.content.SharedPreferences;
 
 
-public class ProfilePreferences extends Preferences {
-    public static final String FIRST_NAME = "user_name";
-    public static final String USER_PASSWORD = "user_password";
+public class Profile extends Preferences {
+    private static final String FIRST_NAME = "user_name";
+    private static final String USER_PASSWORD = "user_password";
 
     public static String getStringData(String prefsToken) {
         return getProfilePreference().getString(prefsToken, "");

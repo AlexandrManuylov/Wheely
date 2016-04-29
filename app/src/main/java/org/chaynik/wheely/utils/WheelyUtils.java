@@ -14,4 +14,8 @@ public class WheelyUtils {
         }
         return false;
     }
+
+    public static boolean isValidProfile(String text) {
+        return text != null && !text.isEmpty() && text.substring(0, 1).equals("a");
+    }
 }

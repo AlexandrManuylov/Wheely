@@ -2,5 +2,6 @@
     <string name="app_name">Wheely@Chaynik</string>
     <string name="auth_hint_user_name">User name</string>
     <string name="auth_hint_password">Password</string>
-    <string name="auth_action_text">SIGN IN</string>
+    <string name="auth_action_sign_in">SIGN IN</string>
+    <string name="menu_action_sign_out">SIGN OUT</string>
 </resources>

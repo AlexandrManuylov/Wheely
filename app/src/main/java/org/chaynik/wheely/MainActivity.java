@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import org.chaynik.wheely.preferences.Profile;
+import org.chaynik.wheely.utils.WheelyUtils;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private String mSelectedTag;
 
@@ -18,7 +21,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        showFragmentByTag(LoginFragment.TAG);
+        if (WheelyUtils.isValidProfile(Profile.getUserName()) && WheelyUtils.isValidProfile(Profile.getUserPassword())) {
+            mSelectedTag = MapsFragment.TAG;
+        } else {
+            mSelectedTag = LoginFragment.TAG;
+        }
+        showFragmentByTag(mSelectedTag);
     }
 
     private void showFragmentByTag(String tag) {
@@ -28,8 +36,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void showMapsFragment() {
         showFragmentByTag(MapsFragment.TAG, R.anim.anim_enter_right_to_left, R.anim.fade_out);
     }
+
     public void showLoginFragment() {
-        showFragmentByTag(MapsFragment.TAG, R.anim.anim_enter_left_to_right, R.anim.fade_out);
+        showFragmentByTag(LoginFragment.TAG, R.anim.anim_enter_left_to_right, R.anim.fade_out);
     }
 
     private void showFragmentByTag(String tag, @AnimRes int enter, @AnimRes int exit) {

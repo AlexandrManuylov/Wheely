@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Wheely</string>
+    <string name="app_name">Wheely@Chaynik</string>
     <string name="auth_hint_user_name">User name</string>
     <string name="auth_hint_password">Password</string>
     <string name="auth_action_text">SIGN IN</string>

@@ -1,5 +1,6 @@
 package org.chaynik.wheely;
 
+import android.support.annotation.AnimRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -10,6 +11,7 @@ import android.view.View;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private String mSelectedTag;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,18 +19,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         showFragmentByTag(LoginFragment.TAG);
-//        findViewById(R.id.button_start_service).setOnClickListener(this);
-//        findViewById(R.id.button_stop_service).setOnClickListener(this);
     }
 
     private void showFragmentByTag(String tag) {
+        showFragmentByTag(tag, 0, 0);
+    }
+
+    public void showMapsFragment() {
+        showFragmentByTag(MapsFragment.TAG, R.anim.anim_enter_right_to_left, R.anim.fade_out);
+    }
+    public void showLoginFragment() {
+        showFragmentByTag(MapsFragment.TAG, R.anim.anim_enter_left_to_right, R.anim.fade_out);
+    }
+
+    private void showFragmentByTag(String tag, @AnimRes int enter, @AnimRes int exit) {
         String oldTag = mSelectedTag;
         mSelectedTag = tag;
         final FragmentManager fm = getSupportFragmentManager();
         final FragmentTransaction ft = fm.beginTransaction();
         final Fragment oldFragment = fm.findFragmentByTag(oldTag);
         final Fragment fragment = fm.findFragmentByTag(tag);
-
+        if (enter != 0 || exit != 0) {
+            ft.setCustomAnimations(enter, exit);
+        }
         if (oldFragment != null && !tag.equals(oldTag)) {
             ft.detach(oldFragment);
         }

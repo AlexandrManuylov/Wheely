@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Wheely</string>
+    <string name="auth_hint_email">Укажите рабочую почту</string>
+    <string name="auth_hint_password">Личный код</string>
 </resources>

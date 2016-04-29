@@ -4,21 +4,33 @@ package org.chaynik.wheely.service;
 import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.util.ArrayMap;
 import android.util.Log;
 
 import com.neovisionaries.ws.client.WebSocket;
-import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
 
+import org.chaynik.wheely.preferences.Profile;
+import org.chaynik.wheely.utils.Const;
+import org.chaynik.wheely.utils.WheelyURLBuilder;
+
 import java.io.IOException;
+import java.net.URL;
+import java.util.Map;
 
 public class WebSocketService extends Service {
+    final String BASE_URL = "http://api.example.org/data/2.5/forecast/daily?";
+    final String USER_NAME_PARAM = "username";
+    final String USER_PASSWORD_PARAM = "password";
+
     private boolean isActive;
     private Handler mHandler = new Handler();
+    private WebSocket mWebSocket;
 
     private Runnable mUpdateTimeTask = new Runnable() {
         public void run() {
@@ -47,21 +59,18 @@ public class WebSocketService extends Service {
     }
 
     public void start() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    WebSocket ws = new WebSocketFactory().createSocket("ws://mini-mdt.wheely.com/?username=a&password=a");
-                    ws.addListener(new SocketListener());
-                    ws.setPingInterval(60 * 1000);
-                    ws.connect();
-                } catch (WebSocketException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+//        try {
+//            Map<String, String> params = new ArrayMap<>();
+//            params.put(Const.USER_NAME_PARAM, Profile.getUserName());
+//            params.put(Const.USER_PASSWORD_PARAM, Profile.getUserPassword());
+//            URL url = WheelyURLBuilder.createURL(params);
+//            mWebSocket = new WebSocketFactory().createSocket(url);
+//            mWebSocket.addListener(new SocketListener());
+//            mWebSocket.setPingInterval(60 * 1000);
+//            mWebSocket.connectAsynchronously();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override
@@ -75,10 +84,14 @@ public class WebSocketService extends Service {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
+        Log.i("Test", "Service: onDestroy");
+
+        if (mWebSocket != null && mWebSocket.isOpen()) {
+            mWebSocket.disconnect();
+        }
         isActive = false;
         mHandler.removeCallbacks(mUpdateTimeTask);
-        Log.i("Test", "Service: onDestroy");
+        super.onDestroy();
     }
 
     @Override

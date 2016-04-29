@@ -1,5 +1,6 @@
 package org.chaynik.wheely;
 
+import android.content.Intent;
 import android.support.annotation.AnimRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -7,9 +8,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import org.chaynik.wheely.preferences.Profile;
+import org.chaynik.wheely.service.WebSocketService;
 import org.chaynik.wheely.utils.WheelyUtils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -23,6 +26,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setSupportActionBar(mToolbar);
         if (WheelyUtils.isValidProfile(Profile.getUserName()) && WheelyUtils.isValidProfile(Profile.getUserPassword())) {
             mSelectedTag = MapsFragment.TAG;
+            if (!WheelyUtils.isServiceRunning(this, WebSocketService.class)) {
+                Log.i("Test", "Activity: onCreate");
+                startService(new Intent(this, WebSocketService.class));
+            } else {
+                Log.i("Test", "Activity: onCreated");
+            }
         } else {
             mSelectedTag = LoginFragment.TAG;
         }

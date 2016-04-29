@@ -27,12 +27,12 @@ public class MapsFragment extends Fragment implements MenuItem.OnMenuItemClickLi
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.maps_fragment, container, false);
         setHasOptionsMenu(true);
-//        if (!WheelyUtils.isServiceRunning(getActivity(), WebSocketService.class)) {
-//            Log.i("Test", "Activity: onCreate");
-//            getActivity().startService(new Intent(getActivity(), WebSocketService.class));
-//        } else {
-//            Log.i("Test", "Activity: onCreated");
-//        }
+        if (!WheelyUtils.isServiceRunning(getActivity(), WebSocketService.class)) {
+            Log.i("Test", "Activity: onCreate");
+            getActivity().startService(new Intent(getActivity(), WebSocketService.class));
+        } else {
+            Log.i("Test", "Activity: onCreated");
+        }
         return view;
     }
 

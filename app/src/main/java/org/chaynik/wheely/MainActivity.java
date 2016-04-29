@@ -26,12 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setSupportActionBar(mToolbar);
         if (WheelyUtils.isValidProfile(Profile.getUserName()) && WheelyUtils.isValidProfile(Profile.getUserPassword())) {
             mSelectedTag = MapsFragment.TAG;
-            if (!WheelyUtils.isServiceRunning(this, WebSocketService.class)) {
-                Log.i("Test", "Activity: onCreate");
-                startService(new Intent(this, WebSocketService.class));
-            } else {
-                Log.i("Test", "Activity: onCreated");
-            }
+
         } else {
             mSelectedTag = LoginFragment.TAG;
         }

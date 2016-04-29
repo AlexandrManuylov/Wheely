@@ -2,6 +2,9 @@ package org.chaynik.wheely.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.util.Log;
+
+import org.chaynik.wheely.BuildConfig;
 
 public class WheelyUtils {
 
@@ -17,5 +20,11 @@ public class WheelyUtils {
 
     public static boolean isValidProfile(String text) {
         return text != null && !text.isEmpty() && text.substring(0, 1).equals("a");
+    }
+
+    public static void logD(String tag, String text) {
+        if (BuildConfig.DEBUG) {
+            Log.d(tag, text == null ? "null" : text);
+        }
     }
 }

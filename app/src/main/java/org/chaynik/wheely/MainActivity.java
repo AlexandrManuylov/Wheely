@@ -1,16 +1,11 @@
 package org.chaynik.wheely;
 
-import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-
-import org.chaynik.wheely.service.WebSocketService;
-import org.chaynik.wheely.utils.WheelyUtils;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private String mSelectedTag;
@@ -22,6 +17,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        findViewById(R.id.button_start_service).setOnClickListener(this);
 //        findViewById(R.id.button_stop_service).setOnClickListener(this);
     }
+
     private void showFragmentByTag(String tag) {
         String oldTag = mSelectedTag;
         mSelectedTag = tag;

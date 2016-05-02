@@ -4,7 +4,10 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import org.chaynik.wheely.BuildConfig;
+import org.chaynik.wheely.WheelyApp;
 
 public class WheelyUtils {
 
@@ -26,5 +29,8 @@ public class WheelyUtils {
         if (BuildConfig.DEBUG) {
             Log.d(tag, text == null ? "null" : text);
         }
+    }
+    public static String objectToJson(Object object){
+        return WheelyApp.getInstance().getGson().toJson(object);
     }
 }

@@ -28,10 +28,11 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     private static final String TAG = "LocationService";
     public static final String LOCATION_RECEIVED = "location.received";
+    public static final String LOCATION_RECEIVED_TAG = "LOCATION";
     private GoogleApiClient mGoogleApiClient;
+    private LocationManager mLocationManager;
+    private LocationListener mLocationListener;
     private final Object locking = new Object();
-    LocationManager mLocationManager;
-    LocationListener mLocationListener;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -84,9 +85,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     private void sendLocationUsingBroadCast(Location location) {
         Intent locationBroadcast = new Intent(LocationService.LOCATION_RECEIVED);
-        locationBroadcast.putExtra("LOCATION", location);
+        locationBroadcast.putExtra(LOCATION_RECEIVED_TAG, location);
         LocalBroadcastManager.getInstance(this).sendBroadcast(locationBroadcast);
-        //stopSelf();
     }
 
     @Override
@@ -94,7 +94,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         synchronized (locking) {
             Log.d(TAG, "Location received successfully [" + location.getLatitude() + "," + location.getLongitude() + "]");
             sendLocationUsingBroadCast(location);
-            //disconnectFusedLocationService();
         }
     }
 
@@ -114,17 +113,14 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
             @Override
             public void onStatusChanged(String s, int i, Bundle bundle) {
-                //To change body of implemented methods use File | Settings | File Templates.
             }
 
             @Override
             public void onProviderEnabled(String s) {
-                //To change body of implemented methods use File | Settings | File Templates.
             }
 
             @Override
             public void onProviderDisabled(String s) {
-                //To change body of implemented methods use File | Settings | File Templates.
             }
         };
 

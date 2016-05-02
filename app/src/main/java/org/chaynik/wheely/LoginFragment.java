@@ -1,7 +1,10 @@
 package org.chaynik.wheely;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +27,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         view.findViewById(R.id.text_sign_in).setOnClickListener(this);
         mEditUserName = (EditText) view.findViewById(R.id.input_user_name);
         mEditPassword = (EditText) view.findViewById(R.id.input_password);
+
+
+
         return view;
     }
 

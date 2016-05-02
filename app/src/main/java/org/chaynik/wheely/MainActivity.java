@@ -2,6 +2,8 @@ package org.chaynik.wheely;
 
 import android.content.Intent;
 import android.support.annotation.AnimRes;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -15,7 +17,9 @@ import org.chaynik.wheely.preferences.Profile;
 import org.chaynik.wheely.service.WebSocketService;
 import org.chaynik.wheely.utils.WheelyUtils;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+import java.util.Map;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
     private String mSelectedTag;
 
     @Override
@@ -78,6 +82,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             fragment = new MapsFragment();
         }
         return fragment;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == MapsFragment.REQUEST_LOCATION) {
+            MapsFragment fragment = (MapsFragment) getSupportFragmentManager().findFragmentByTag(MapsFragment.TAG);
+            if (fragment != null && fragment.isVisible()) {
+                fragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            }
+        }
     }
 
     @Override

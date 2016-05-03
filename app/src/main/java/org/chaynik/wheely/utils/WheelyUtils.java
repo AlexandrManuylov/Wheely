@@ -2,6 +2,8 @@ package org.chaynik.wheely.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -29,6 +31,11 @@ public class WheelyUtils {
         if (BuildConfig.DEBUG) {
             Log.d(tag, text == null ? "null" : text);
         }
+    }
+    private static boolean isNetworkAvailable(Context ctx) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
     public static String objectToJson(Object object){
         return WheelyApp.getInstance().getGson().toJson(object);

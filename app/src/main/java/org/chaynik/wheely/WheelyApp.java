@@ -7,15 +7,19 @@ import android.view.WindowManager;
 
 import com.google.gson.Gson;
 
+import org.chaynik.wheely.model.Model;
+
 public class WheelyApp extends Application {
     private static WheelyApp mInstance;
     private Gson mGson;
+    private Model mModel;
 
     @Override
     public void onCreate() {
         super.onCreate();
         mInstance = this;
         mGson = new Gson();
+        mModel = new Model();
 
     }
 
@@ -25,5 +29,8 @@ public class WheelyApp extends Application {
 
     public static WheelyApp getInstance() {
         return mInstance;
+    }
+    public Model getModel(){
+        return mModel;
     }
 }

@@ -1,7 +1,8 @@
 package org.chaynik.wheely.model.geo.dto;
 
+
 public class GeoData {
-    private int id;
+    transient private int id;
     private double lat;
     private double lon;
 

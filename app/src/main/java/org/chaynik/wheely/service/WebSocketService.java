@@ -3,9 +3,11 @@ package org.chaynik.wheely.service;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.location.Location;
 import android.os.IBinder;
 
@@ -20,6 +22,7 @@ import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
 
+import org.chaynik.wheely.model.geo.GeoInfo;
 import org.chaynik.wheely.model.geo.dto.GeoData;
 import org.chaynik.wheely.preferences.Profile;
 import org.chaynik.wheely.utils.Const;
@@ -58,20 +61,19 @@ public class WebSocketService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         WheelyUtils.logD(TAG, "onStartCommand");
-        start();
+        init();
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
-        WheelyUtils.logD(TAG, "onDestroy");
-        if (mWebSocket != null && mWebSocket.isOpen()) {
-            mWebSocket.disconnect();
-        }
         super.onDestroy();
+        WheelyUtils.logD(TAG, "onDestroy");
+        shutDownService();
     }
 
-    public void start() {
+    public void init() {
+        WheelyUtils.logD(TAG, "init");
         try {
             Map<String, String> params = new ArrayMap<>();
             params.put(Const.USER_NAME_PARAM, Profile.getUserName());
@@ -86,14 +88,27 @@ public class WebSocketService extends Service {
     }
 
     private void sendMessage(String message) {
-        if (mWebSocket != null && mWebSocket.isOpen()) {
-            mWebSocket.sendText(message);
+        if (mWebSocket != null) {
+            if (mWebSocket.isOpen()) {
+                mWebSocket.sendText(message);
+            } else {
+                init();
+            }
         }
     }
 
     @Override
     public void onTaskRemoved(Intent Intent) {
+        shutDownService();
         WheelyUtils.logD(TAG, "onTaskRemoved");
+    }
+
+    public void shutDownService() {
+        if (mWebSocket != null && mWebSocket.isOpen()) {
+            mWebSocket.disconnect();
+        }
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mLocationReceiver);
+        stopService(new Intent(this, LocationService.class));
     }
 
     private WebSocketAdapter mWebSocketAdapter = new WebSocketAdapter() {
@@ -101,15 +116,6 @@ public class WebSocketService extends Service {
         public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
             WheelyUtils.logD(TYPE_MESSAGE, "onConnected!");
             getUserLocationInfo();
-//            Log.d(TYPE_MESSAGE, "Connected!");
-//            JSONObject json = new JSONObject();
-//            try {
-//                json.put("lon", 55.755826);
-//                json.put("lat", 37.6173);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//            websocket.sendText(json.toString());
         }
 
         @Override
@@ -119,12 +125,16 @@ public class WebSocketService extends Service {
 
         @Override
         public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
-            super.onError(websocket, cause);
+            WheelyUtils.logD(TYPE_MESSAGE, cause.getError().name());
         }
 
         @Override
         public void onTextMessage(WebSocket websocket, String text) throws Exception {
-            WheelyUtils.logD(TYPE_MESSAGE, text);
+            WheelyUtils.logD(TAG, "onTextMessage: - " + text);
+            Intent locationBroadcast = new Intent(GeoInfo.GEO_INFO_RECEIVED);
+            locationBroadcast.putExtra(GeoInfo.GEO_INFO_RECEIVED_TAG, text);
+            LocalBroadcastManager.getInstance(WebSocketService.this).sendBroadcast(locationBroadcast);
+
         }
     };
 
@@ -132,10 +142,11 @@ public class WebSocketService extends Service {
         if (!WheelyUtils.isServiceRunning(this, LocationService.class)) {
             WheelyUtils.logD(TAG, "LocationService: onCreate");
             startService(new Intent(this, LocationService.class));
+            LocalBroadcastManager.getInstance(this).registerReceiver(mLocationReceiver, new IntentFilter(LocationService.LOCATION_RECEIVED));
         } else {
             WheelyUtils.logD(TAG, "LocationService: onCreated");
         }
-        LocalBroadcastManager.getInstance(this).registerReceiver(mLocationReceiver, new IntentFilter(LocationService.LOCATION_RECEIVED));
+
     }
 
     private BroadcastReceiver mLocationReceiver = new BroadcastReceiver() {
@@ -150,14 +161,6 @@ public class WebSocketService extends Service {
                     sendMessage(message);
                 }
             }
-//            if (location != null) {
-//                if (isNeedAbort) {
-//                    context.stopService(new Intent(context, LocationService.class));
-//                }
-//                LocalBroadcastManager.getInstance(context).unregisterReceiver(mLocationReceiver);
-//                setData(location);
-//            }
-
         }
     };
 

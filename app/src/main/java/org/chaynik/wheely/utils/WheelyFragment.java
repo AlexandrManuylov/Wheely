@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class WheelyFragment extends Fragment implements SnackActionListener{
+public class WheelyFragment extends Fragment implements SnackActionListener {
     private List<Pair<ModelBase, ModelBase.Listener>> mModelListeners = new ArrayList<Pair<ModelBase, ModelBase.Listener>>();
 
     @Override
@@ -62,21 +62,25 @@ public class WheelyFragment extends Fragment implements SnackActionListener{
     }
 
     public Snackbar getSnackBarByError(ModelError error, @Snackbar.Duration int duration) {
-        final CoordinatorLayout coordinatorLayout = (CoordinatorLayout) getView();
-        Snackbar snackbar = Snackbar.make(coordinatorLayout, error.getTextId(), duration);
-        if (error.getTextActionId() > 0) {
-            snackbar.setActionTextColor(getResources().getColor(R.color.red));
-            snackbar.getView().setTag(error.getTextActionId());
-            snackbar.setAction(error.getTextActionId(), new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    snackActionClick(v);
-                }
-            });
+        if (getView() instanceof CoordinatorLayout) {
+            final CoordinatorLayout coordinatorLayout = (CoordinatorLayout) getView();
+            Snackbar snackbar = Snackbar.make(coordinatorLayout, error.getTextId(), duration);
+            snackbar.getView().setTag(error.getTextId());
+            if (error.getTextActionId() > 0) {
+                snackbar.setActionTextColor(getResources().getColor(R.color.red));
+                snackbar.setAction(error.getTextActionId(), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        snackActionClick(v);
+                    }
+                });
+            }
+            return snackbar;
+        } else {
+            return null;
         }
-        return snackbar;
-    }
 
+    }
 
 
     @Override

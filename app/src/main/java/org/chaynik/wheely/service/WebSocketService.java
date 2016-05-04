@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -24,6 +25,7 @@ import com.neovisionaries.ws.client.WebSocketFrame;
 import org.chaynik.wheely.model.geo.dto.GeoData;
 import org.chaynik.wheely.preferences.Profile;
 import org.chaynik.wheely.utils.Const;
+import org.chaynik.wheely.utils.ModelError;
 import org.chaynik.wheely.utils.WheelyURLBuilder;
 import org.chaynik.wheely.utils.WheelyUtils;
 
@@ -35,6 +37,7 @@ import java.util.Map;
 public class WebSocketService extends Service {
     public final static String GEO_INFO_RECEIVED = "geo.info.received";
     public final static String GEO_INFO_RECEIVED_TAG = "info_received";
+    public final static String ERROR_TAG = "error_tag";
     private static final String TAG = "WebSocketService";
     public static final String TYPE_MESSAGE = "message";
     private Handler mHandler = new Handler();
@@ -55,6 +58,7 @@ public class WebSocketService extends Service {
 //        startService(hideIntent);
 
     }
+
 
     private Runnable mTryInternetConnection = new Runnable() {
         public void run() {
@@ -140,6 +144,7 @@ public class WebSocketService extends Service {
         @Override
         public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
             WheelyUtils.logD(TYPE_MESSAGE, "onDisconnected!");
+
         }
 
         @Override
@@ -149,6 +154,9 @@ public class WebSocketService extends Service {
                     stopLocationService();
                 }
                 mHandler.postDelayed(mTryInternetConnection, 5000);
+                Intent locationBroadcast = new Intent(GEO_INFO_RECEIVED);
+                locationBroadcast.putExtra(ERROR_TAG, ModelError.CONNECTION_ERROR);
+                LocalBroadcastManager.getInstance(WebSocketService.this).sendBroadcast(locationBroadcast);
             }
             WheelyUtils.logD(TYPE_MESSAGE, cause.getError().name());
         }

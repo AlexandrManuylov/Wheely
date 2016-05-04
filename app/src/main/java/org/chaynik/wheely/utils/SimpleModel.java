@@ -3,6 +3,7 @@ package org.chaynik.wheely.utils;
 
 public abstract class SimpleModel<DataType> extends ModelBase {
     protected DataType mData;
+    protected ModelError mModelError;
 
 
     public SimpleModel() {
@@ -20,13 +21,18 @@ public abstract class SimpleModel<DataType> extends ModelBase {
 
     public void setData(final DataType data) {
         mIsUpdating = false;
+        mModelError = null;
         mData = data;
         notifyListeners();
     }
 
-    public void setError() {
+    public void setError(ModelError error) {
+        mModelError = error;
         mIsUpdating = false;
         errorNotifyListeners();
     }
 
+    public ModelError getError() {
+        return mModelError;
+    }
 }

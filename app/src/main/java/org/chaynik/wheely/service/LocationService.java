@@ -35,15 +35,16 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB) {
-            Log.d(TAG, "Start mLocationClient");
+            WheelyUtils.logD(TAG, "Start mLocationClient");
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addApi(LocationServices.API)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
+
                     .build();
             mGoogleApiClient.connect();
         } else {
-            Log.d(TAG, "Start getOldLocation()");
+            WheelyUtils.logD(TAG, "Start getOldLocation()");
             getOldLocation();
         }
         return START_STICKY;
@@ -61,7 +62,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        WheelyUtils.logD(TAG, "onConnectionSuspended");
     }
 
     public void disconnectFusedLocationService() {
@@ -83,19 +84,20 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     @Override
     public void onLocationChanged(Location location) {
         synchronized (locking) {
-            Log.d(TAG, "Location received successfully [" + location.getLatitude() + "," + location.getLongitude() + "]");
+
+            WheelyUtils.logD(TAG, "Location received successfully [" + location.getLatitude() + "," + location.getLongitude() + "]");
             sendLocationUsingBroadCast(location);
         }
     }
 
     private void getOldLocation() {
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
         mLocationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                Log.d(TAG, "Location received successfully [" + location.getLatitude() + "," + location.getLongitude() + "]");
+                WheelyUtils.logD(TAG, "Location received successfully [" + location.getLatitude() + "," + location.getLongitude() + "]");
                 sendLocationUsingBroadCast(location);
-                mLocationManager.removeUpdates(mLocationListener);
             }
 
             @Override
@@ -112,17 +114,16 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         };
 
         if (mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
-            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mLocationListener);
+            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 0, mLocationListener);
         if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, mLocationListener);
 
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.d(TAG, "Error connecting to Fused Location Provider");
+        WheelyUtils.logD(TAG, "Error connecting to Fused Location Provider");
         getOldLocation();
-
     }
 
     @Override
@@ -132,7 +133,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     @Override
     public void onDestroy() {
-        Log.d(TAG, "onDestroy");
+        WheelyUtils.logD(TAG, "onDestroy");
         super.onDestroy();
         disconnectFusedLocationService();
     }
@@ -140,7 +141,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
-        Log.d(TAG, "onTaskRemoved");
+        WheelyUtils.logD(TAG, "onTaskRemoved");
         disconnectFusedLocationService();
     }
 }

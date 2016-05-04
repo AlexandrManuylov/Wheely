@@ -19,7 +19,7 @@ import org.chaynik.wheely.utils.WheelyUtils;
 
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
+public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
     private String mSelectedTag;
 
     @Override
@@ -92,24 +92,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 fragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
             }
         }
-    }
-
-    @Override
-    public void onClick(View v) {
-//        switch (v.getId()) {
-//            case R.id.button_start_service:
-//                if (!WheelyUtils.isServiceRunning(this, WebSocketService.class)) {
-//                    Log.i("Test", "Activity: onCreate");
-//                    startService(new Intent(this, WebSocketService.class));
-//                } else {
-//                    Log.i("Test", "Activity: onCreated");
-//                }
-//                break;
-//            case R.id.button_stop_service:
-//                Log.i("Test", "Activity: onStop");
-//                stopService(new Intent(this, WebSocketService.class));
-//                break;
-//        }
-
     }
 }

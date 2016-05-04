@@ -7,9 +7,11 @@
     <string name="google_maps_key">AIzaSyAP0ZbbmMidhW0vLF7keCDBMmsIgRKNoKc</string>
 
     <string name="model_error_location_permission">Резрешите приложению использовать GPS</string>
-    <string name="model_error_location_permission_action">НАСТРОЙКИ</string>
+    <string name="model_error_common_settings_action">НАСТРОЙКИ</string>
     <string name="model_error_unstable_network_connection">Нестабильное соединение с сетью</string>
     <string name="model_error_no_any_network_connection">Проверьте подключение к интернету</string>
     <string name="model_error_unknown_error">Неизвестная ошибка :(</string>
     <string name="model_error_unknown_error_action">OKAY</string>
+    <string name="model_error_gps_disabled">Включите GPS...</string>
+
 </resources>

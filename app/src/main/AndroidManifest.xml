@@ -24,7 +24,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <receiver android:name=".model.geo.GPSLocationReceiver">
+            <intent-filter>
+                <action android:name="android.location.PROVIDERS_CHANGED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
         <service
             android:name="org.chaynik.wheely.service.WebSocketService"
             android:enabled="true"
@@ -44,5 +49,4 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
     </application>
-
 </manifest>

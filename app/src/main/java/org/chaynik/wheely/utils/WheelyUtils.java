@@ -1,9 +1,12 @@
 package org.chaynik.wheely.utils;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -40,4 +43,8 @@ public class WheelyUtils {
     public static String objectToJson(Object object){
         return WheelyApp.getInstance().getGson().toJson(object);
     }
-}
+
+    public static boolean isLocationPermissionGranted(Context ctx) {
+        return ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }}

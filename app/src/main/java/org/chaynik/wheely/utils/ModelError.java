@@ -2,7 +2,6 @@ package org.chaynik.wheely.utils;
 
 
 import org.chaynik.wheely.R;
-import org.chaynik.wheely.model.Model;
 
 public enum ModelError {
     LOCATION_PERMISSION_IS_NOT_GRANTED(R.string.model_error_location_permission, R.string.model_error_location_permission_action),

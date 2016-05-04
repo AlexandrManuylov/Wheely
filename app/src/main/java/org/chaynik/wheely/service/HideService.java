@@ -22,10 +22,4 @@ public class HideService extends Service {
         stopForeground(true);
     }
 
-    @Override
-    public void onDestroy() {
-
-        Log.i("Test", "HideServicea: onDestroy");
-        super.onDestroy();
-    }
 }

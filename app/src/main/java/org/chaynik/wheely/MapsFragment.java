@@ -5,7 +5,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -14,7 +13,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -35,7 +33,6 @@ import com.google.android.gms.maps.model.LatLng;
 
 import org.chaynik.wheely.model.geo.GeoInfo;
 import org.chaynik.wheely.preferences.Preferences;
-import org.chaynik.wheely.service.HideService;
 import org.chaynik.wheely.service.WebSocketService;
 import org.chaynik.wheely.utils.ModelBase;
 import org.chaynik.wheely.utils.ModelError;
@@ -90,7 +87,7 @@ public class MapsFragment extends WheelyFragment implements MenuItem.OnMenuItemC
         registerModelListener(mGeoInfo, mGeoListener);
         super.onResume();
         mMapView.onResume();
-        if (!isPermissionGranted()) {
+        if (!WheelyUtils.isLocationPermissionGranted(getActivity())) {
             if (isNeedShowRequestAlert()) {
                 showRequestAlert(LOCATION_PERMISSION, REQUEST_LOCATION);
             } else {
@@ -212,10 +209,7 @@ public class MapsFragment extends WheelyFragment implements MenuItem.OnMenuItemC
         }
     };
 
-    private boolean isPermissionGranted() {
-        return ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-    }
+
 
     private boolean isNeedShowRequestAlert() {
         return shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -233,7 +227,7 @@ public class MapsFragment extends WheelyFragment implements MenuItem.OnMenuItemC
         uiSettings.setCompassEnabled(true);
         CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(55.79040079, 37.38059521)).zoom(12).build();
         mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        if (isPermissionGranted()) {
+        if (WheelyUtils.isLocationPermissionGranted(getActivity())) {
             mGoogleMap.setMyLocationEnabled(true);
         }
     }
